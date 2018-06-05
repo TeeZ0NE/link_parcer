@@ -46,7 +46,7 @@ function get_data($result, $query, $output_file, $log)
 			preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
 			if (!empty($op_ip_arr)) array_push($ip_arr, $op_ip_arr[1]);
 			# registrar
-			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
+			preg_match("/regis[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
 			if (!empty($op_registr_arr)) $registrar = $op_registr_arr[1];
 			# city
 			preg_match("/city[-_\s\w]*:\s*([-\w\d\.]+)/i", $value, $op_city_arr);
