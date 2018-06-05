@@ -7,18 +7,75 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 $query = 'energy.mk.ua';
 
 $whois = new Whois();
+
+
+$ns_arr = $ip_arr = array();
+$created = $expires = $registrar = $city = $country = "-";
+$file = fopen("download/urls_list.txt", "r");
+$output_file = "download/test.md";
+$log = "download/whois-logs.htm";
+
+# create outpu file if doesn't exist
+if (!file_exists($output_file)) {
+	$string = "## Список адресів\n";
+	$string .= "param|value\n:-|:-:\n";
+	file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX);
+}
+
 $result = $whois->lookup($query, true);
-echo "<pre>";
-print_r($result);
-echo "</pre>";
-$res_arr = array();
-if(isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
-	foreach ($result["rawdata"] as $key => $value) {
-		preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $op_arr);
-		if (count($op_arr)) array_push($res_arr,$op_arr[1]);
+
+function get_data($result, $query, $output_file, $log)
+{
+	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
+		foreach ($result["rawdata"] as $key => $value) {
+			# ns servers
+			preg_match("/nserver:\s*([-\w\d\.]*)/i", $value, $op_arr);
+			if (count($op_arr)) array_push($ns_arr, $op_arr[1]);
+			# created
+			preg_match("/crea[\w]*:\s*([-\w\d\.]+)/i", $value, $op_cr_arr);
+			if (count($op_cr_arr)) $created = $op_cr_arr[1];
+			# expires
+			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_exp_arr);
+			if (count($op_cr_arr)) $expires = $op_exp_arr[1];
+			# ip adresses
+			preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
+			if (count($op_ip_arr)) array_push($ip_arr, $op_cr_arr[1]);
+			# registrar
+			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
+			if (count($op_registr_arr)) $registrar = $op_registr_arr[1];
+			# city
+			preg_match("/city[-_\s\w]*:\s*([-\w\d\.]+)/i", $value, $op_city_arr);
+			if (count($op_city_arr)) $city = $op_city_arr[1];
+			# country
+			preg_match("/cou[\w]*:\s*([-\w\d\.]+)/i", $value, $op_country_arr);
+			if (count($op_country_arr)) $country = $op_country_arr[1];
+		}
+		write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log);
 	}
 }
-print_r($res_arr);
+
+function write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log)
+{
+	$string = "url|$query\n";
+	$string .= "Створено|$created\n";
+	$string .= "Закінч.|$expires\n";
+	$string .= "Регістр.|$registrar\n";
+	$string .= "Город|$city\n";
+	$string .= "Країна|$country\n";
+	if (count($ns_arr)) {
+		for ($i = 0; $i < count($ns_arr); $i++) {
+			$string .= "ns|$ns_arr[$i]\n";
+		}
+	} else $string .= "ns|-\n";
+	if (count($ip_arr)) {
+		for ($i = 0; $i < count($ip_arr); $i++) {
+			$string .= "IP|$ip_arr[$i]\n";
+		}
+	} else $string .= "IP|-\n";
+	if (file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX))
+		file_put_contents($log, "<p><b>$query</b> записан</p>", FILE_APPEND | LOCK_EX);
+	else file_put_contents($log, "<p><b>$query</b> не записан</p>", FILE_APPEND | LOCK_EX);
+}
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
