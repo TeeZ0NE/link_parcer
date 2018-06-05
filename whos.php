@@ -6,11 +6,11 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 $query = 'http://yugstal.com';
 $whois = new Whois();
-$result = $whois->lookup($query, false);
+$result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
-
+print_r($result[regyinfo]);
 # Reading file line by line
 /*$file = fopen ("download/urls_list.txt","r");
 $output_file = "download/test.md";
