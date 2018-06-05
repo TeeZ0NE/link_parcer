@@ -12,11 +12,13 @@ echo "<pre>";
 print_r($result);
 echo "</pre>";
 print_r($result["regrinfo"]["registered"]);
+$op_arr = array();
 foreach ($result["rawdata"] as $key => $value){
 	echo  $value."<br>";
-	preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $output_array[],PREG_OFFSET_CAPTURE);
+	preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $op_arr);
+	if(count($op_arr)) echo "found $output_array[1] <br>";
 }
-print_r($output_array);
+print_r($op_arr);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
