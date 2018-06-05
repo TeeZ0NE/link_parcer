@@ -40,7 +40,7 @@ function get_data($result, $query, $output_file, $log)
 			if (!empty($op_cr_arr)) $expires = $op_exp_arr[1];
 			# ip adresses
 			preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
-			if (!empty($op_ip_arr)) array_push($ip_arr, $op_cr_arr[1]);
+			if (!empty($op_ip_arr)) array_push($ip_arr, $op_ip_arr[1]);
 			# registrar
 			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
 			if (!empty($op_registr_arr)) $registrar = $op_registr_arr[1];
