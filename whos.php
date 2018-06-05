@@ -23,7 +23,7 @@ if (!file_exists($output_file)) {
 }
 
 $result = $whois->lookup($query, true);
-
+get_data($result,$query,$output_file,$log);
 function get_data($result, $query, $output_file, $log)
 {
 	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
