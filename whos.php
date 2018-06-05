@@ -12,6 +12,7 @@ echo "<pre>";
 print_r($result);
 echo "</pre>";
 if(in_array("Nserver",$result["rawdata"])) $result["rawdata"]; else echo"dont";
+print_r($result["rawdata"]);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
