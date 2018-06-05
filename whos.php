@@ -4,10 +4,6 @@ ini_set("display_errors", 1);
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 	require(__DIR__ . '/vendor/autoload.php');
 }
-$query = 'energy.mk.ua';
-
-$whois = new Whois();
-
 
 $file = fopen("download/urls_list.txt", "r");
 $output_file = "download/test.md";
@@ -16,13 +12,22 @@ $log = "download/whois-logs.htm";
 # create outpu file if doesn't exist
 if (!file_exists($output_file)) {
 	$string = "## Список адресів\n";
-	$string .= "param|value\n:-|:-:\n";
+	$string .= "Назва|Зевчення\n:-|:-:\n";
 	file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX);
 }
 
-$result = $whois->lookup($query, true);
-print_r($result);
-get_data($result, $query, $output_file, $log);
+function get_urls($file, $output_file, $log){
+	$whois = new Whois();
+	while(!feof($file)) {
+		$testing_url = fgets($file);
+		$result = $whois->lookup($testing_url, true);
+		get_data($result, $testing_url, $output_file, $log);
+		$sleep = rand(60,120);
+		sleep($sleep);
+		file_put_contents($log,"<p>sleep $sleep</p>",FILE_APPEND | LOCK_EX);
+	}
+}
+
 function get_data($result, $query, $output_file, $log)
 {
 	$ns_arr = $ip_arr = array();
@@ -77,6 +82,8 @@ function write_data2file($query, $created, $expires, $registrar, $city, $country
 		file_put_contents($log, "<p><b>$query</b> записан</p>", FILE_APPEND | LOCK_EX);
 	else file_put_contents($log, "<p><b>$query</b> не записан</p>", FILE_APPEND | LOCK_EX);
 }
+
+get_urls($file,$output_file,$log);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
