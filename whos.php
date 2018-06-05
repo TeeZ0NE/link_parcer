@@ -77,7 +77,7 @@ function write_data2file($query, $created, $expires, $registrar, $city, $country
 		for ($i = 0; $i < count($ip_arr); $i++) {
 			$string .= "IP|$ip_arr[$i]\n";
 		}
-	} else $string .= "IP|-\n";
+	} else $string .= "IP|-\n\n";
 	if (file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX))
 		file_put_contents($log, "<p><b>$query</b> записан</p>", FILE_APPEND | LOCK_EX);
 	else file_put_contents($log, "<p><b>$query</b> не записан</p>", FILE_APPEND | LOCK_EX);
