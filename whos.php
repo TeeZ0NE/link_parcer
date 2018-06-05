@@ -14,6 +14,7 @@ echo "</pre>";
 $rawdata_arr = $result["rawdata"];
 if(in_array("Nserver:",$rawdata_arr)) $rawdata_arr; else echo"dont";
 print_r($result["regrinfo"]["registered"]);
+print_r($rawdata_arr);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
