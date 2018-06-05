@@ -9,8 +9,6 @@ $query = 'energy.mk.ua';
 $whois = new Whois();
 
 
-$ns_arr = $ip_arr = array();
-$created = $expires = $registrar = $city = $country = "-";
 $file = fopen("download/urls_list.txt", "r");
 $output_file = "download/test.md";
 $log = "download/whois-logs.htm";
@@ -23,9 +21,12 @@ if (!file_exists($output_file)) {
 }
 
 $result = $whois->lookup($query, true);
-get_data($result,$query,$output_file,$log);
+print_r($result);
+get_data($result, $query, $output_file, $log);
 function get_data($result, $query, $output_file, $log)
 {
+	$ns_arr = $ip_arr = array();
+	$created = $expires = $registrar = $city = $country = "-";
 	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
 		foreach ($result["rawdata"] as $key => $value) {
 			# ns servers
