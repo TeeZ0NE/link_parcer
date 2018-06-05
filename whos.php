@@ -6,7 +6,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 
 $file = fopen("download/urls_list.txt", "r");
-$output_file = "download/test.md";
+$output_file = "download/whois.md";
 $log = "download/whois-logs.htm";
 
 # create outpu file if doesn't exist
