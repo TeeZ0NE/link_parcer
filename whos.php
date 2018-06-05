@@ -12,7 +12,6 @@ $log = "download/whois-logs.htm";
 # create outpu file if doesn't exist
 if (!file_exists($output_file)) {
 	$string = "## Список адресів\n";
-	$string .= "Назва|Зевчення\n:-|:-:\n";
 	file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX);
 }
 
@@ -62,7 +61,8 @@ function get_data($result, $query, $output_file, $log)
 
 function write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log)
 {
-	$string = "url|$query\n";
+	$string = "Назва|Значення\n:-|:-:\n";
+	$string .= "url|**$query**\n";
 	$string .= "Створено|$created\n";
 	$string .= "Закінч.|$expires\n";
 	$string .= "Регістр.|$registrar\n";
