@@ -11,14 +11,14 @@ $result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
-print_r($result["regrinfo"]["registered"]);
-$op_arr = array();
-foreach ($result["rawdata"] as $key => $value){
-//	echo  $value."<br>";
-	preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $op_arr);
-	if(count($op_arr)) echo "found $op_arr[1] <br>";
+$res_arr = array();
+if(isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
+	foreach ($result["rawdata"] as $key => $value) {
+		preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $op_arr);
+		if (count($op_arr)) array_push($res_arr,$op_arr[1]);
+	}
 }
-print_r($op_arr);
+print_r($res_arr);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
