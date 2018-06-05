@@ -11,7 +11,7 @@ $result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
-if(in_array("Nserver",$result["rawdata"])) $result["rawdata"];
+if(in_array("Nserver",$result["rawdata"])) $result["rawdata"]; else echo"dont";
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
