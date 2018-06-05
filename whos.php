@@ -4,7 +4,8 @@ ini_set("display_errors", 1);
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 	require(__DIR__ . '/vendor/autoload.php');
 }
-$query = 'google.com.ua';
+$query = 'https://www.energy.mk.ua';
+
 $whois = new Whois();
 $result = $whois->lookup($query, true);
 echo "<pre>";
@@ -30,9 +31,9 @@ echo "well done";
 
 # sorting and writing file
 
-$contents = file_get_contents("download/urls.txt");
+$contents = file_get_contents("download/urls_list.txt");
 //print_r($contents);
-$result = preg_replace("/(https?:\/\/[-\d\w\.]+)\/?(.*)/", "$1", $contents);
+	$result = preg_replace("/https?:\/\/(?:www.)?([-\w\d\.]*)/", "$1", $contents);
 if (file_put_contents("download/sorted_urls.txt",$result)){
 	echo "well done<br>";
 } else echo "error occur!<br>";
