@@ -30,25 +30,25 @@ function get_data($result, $query, $output_file, $log)
 		foreach ($result["rawdata"] as $key => $value) {
 			# ns servers
 			preg_match("/nserver:\s*([-\w\d\.]*)/i", $value, $op_arr);
-			if (count($op_arr)) array_push($ns_arr, $op_arr[1]);
+			if (!empty($op_arr)) array_push($ns_arr, $op_arr[1]);
 			# created
 			preg_match("/crea[\w]*:\s*([-\w\d\.]+)/i", $value, $op_cr_arr);
-			if (count($op_cr_arr)) $created = $op_cr_arr[1];
+			if (!empty($op_cr_arr)) $created = $op_cr_arr[1];
 			# expires
 			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_exp_arr);
-			if (count($op_cr_arr)) $expires = $op_exp_arr[1];
+			if (!empty($op_cr_arr)) $expires = $op_exp_arr[1];
 			# ip adresses
 			preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
-			if (count($op_ip_arr)) array_push($ip_arr, $op_cr_arr[1]);
+			if (!empty($op_ip_arr)) array_push($ip_arr, $op_cr_arr[1]);
 			# registrar
 			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
-			if (count($op_registr_arr)) $registrar = $op_registr_arr[1];
+			if (!empty($op_registr_arr)) $registrar = $op_registr_arr[1];
 			# city
 			preg_match("/city[-_\s\w]*:\s*([-\w\d\.]+)/i", $value, $op_city_arr);
-			if (count($op_city_arr)) $city = $op_city_arr[1];
+			if (!empty($op_city_arr)) $city = $op_city_arr[1];
 			# country
 			preg_match("/cou[\w]*:\s*([-\w\d\.]+)/i", $value, $op_country_arr);
-			if (count($op_country_arr)) $country = $op_country_arr[1];
+			if (!empty($op_country_arr)) $country = $op_country_arr[1];
 		}
 		write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log);
 	}
