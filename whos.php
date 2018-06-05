@@ -22,8 +22,8 @@ function get_urls($file, $output_file, $log){
 		$result = $whois->lookup($testing_url[0], true);
 		get_data($result, $testing_url[0], $output_file, $log);
 		$sleep = rand(60,120);
-		sleep($sleep);
 		file_put_contents($log,"<p>sleep $sleep</p>",FILE_APPEND | LOCK_EX);
+		sleep($sleep);
 	}
 }
 
