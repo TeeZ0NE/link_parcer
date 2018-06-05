@@ -11,8 +11,10 @@ $result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
+if(in_array("Nserver",$result["rawdata"])) echo "exist";
+/*
 # Reading file line by line
-/*$file = fopen ("download/urls_list.txt","r");
+$file = fopen ("download/urls_list.txt","r");
 $output_file = "download/test.md";
 header('Content-Type: text/plain');
 if(!file_exists($output_file)){
@@ -23,14 +25,15 @@ if(!file_exists($output_file)){
 while(!feof($file)) {
 	$testing_url = fgets($file);
 //	echo "testing string: " . $testing_url;
-	preg_match("/.",$testing_url,$output);
+	//preg_match("/.",$testing_url,$output);
+	$result = $whois->lookup($testing_url, true);
 	$string = "site|$output[0]\n";
 	file_put_contents($output_file,$string,FILE_APPEND | LOCK_EX);
 }
 echo "well done";
 
 # sorting and writing file
-
+/*
 $contents = file_get_contents("download/urls_list.txt");
 //print_r($contents);
 	$result = preg_replace("/https?:\/\/(?:www.)?([-\w\d\.]*)/", "$1", $contents);
