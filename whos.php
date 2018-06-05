@@ -13,7 +13,8 @@ print_r($result);
 echo "</pre>";
 print_r($result["regrinfo"]["registered"]);
 foreach ($result["rawdata"] as $key => $value){
-	preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $output_array);
+	echo  $value."<br>";
+	//preg_match("/nserver:\s+([\w\d\.]*)/i", $value, $output_array);
 }
 print_r($output_array);
 /*
