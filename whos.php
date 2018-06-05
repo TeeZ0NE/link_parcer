@@ -4,13 +4,12 @@ ini_set("display_errors", 1);
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 	require(__DIR__ . '/vendor/autoload.php');
 }
-$query = 'http://yugstal.com';
+$query = 'http://мой.укр';
 $whois = new Whois();
 $result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
-print_r($result["regyinfo"]);
 # Reading file line by line
 /*$file = fopen ("download/urls_list.txt","r");
 $output_file = "download/test.md";
