@@ -19,9 +19,9 @@ if (!file_exists($output_file)) {
 function get_urls($file, $output_file, $log){
 	$whois = new Whois();
 	while(!feof($file)) {
-		$testing_url = fgets($file);
-		$result = $whois->lookup($testing_url, true);
-		get_data($result, $testing_url, $output_file, $log);
+		$testing_url = preg_match("/.*/",fgets($file));
+		$result = $whois->lookup($testing_url[0], true);
+		get_data($result, $testing_url[0], $output_file, $log);
 		$sleep = rand(60,120);
 		sleep($sleep);
 		file_put_contents($log,"<p>sleep $sleep</p>",FILE_APPEND | LOCK_EX);
