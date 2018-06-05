@@ -10,7 +10,7 @@ $result = $whois->lookup($query, true);
 echo "<pre>";
 print_r($result);
 echo "</pre>";
-print_r($result[regyinfo]);
+print_r($result["regyinfo"]);
 # Reading file line by line
 /*$file = fopen ("download/urls_list.txt","r");
 $output_file = "download/test.md";
