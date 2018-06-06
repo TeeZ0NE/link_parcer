@@ -31,7 +31,7 @@ function get_data($result, $query, $output_file, $log)
 {
 	$ns_arr = $ip_arr = array();
 	$created = $expires = $registrar = $city = $country = "-";
-	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]) {
+	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]=="yes") {
 		foreach ($result["rawdata"] as $key => $value) {
 			# ns servers
 			preg_match("/nserver:\s*([-\w\d\.]*)/i", $value, $op_arr);
