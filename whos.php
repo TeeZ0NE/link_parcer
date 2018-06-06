@@ -15,14 +15,15 @@ if (!file_exists($output_file)) {
 	file_put_contents($output_file, $string, FILE_APPEND | LOCK_EX);
 }
 
-function get_urls($file, $output_file, $log){
+function get_urls($file, $output_file, $log)
+{
 	$whois = new Whois();
-	while(!feof($file)) {
-		preg_match("/.*/",fgets($file),$testing_url);
+	while (!feof($file)) {
+		preg_match("/.*/", fgets($file), $testing_url);
 		$result = $whois->lookup($testing_url[0], true);
 		get_data($result, $testing_url[0], $output_file, $log);
-		$sleep = rand(60,120);
-		file_put_contents($log,"<p>sleep $sleep</p>",FILE_APPEND | LOCK_EX);
+		$sleep = rand(60, 120);
+		file_put_contents($log, "<p>sleep $sleep</p>", FILE_APPEND | LOCK_EX);
 		sleep($sleep);
 	}
 }
@@ -31,32 +32,37 @@ function get_data($result, $query, $output_file, $log)
 {
 	$ns_arr = $ip_arr = array();
 	$created = $expires = $registrar = $city = $country = "-";
-	if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"]=="yes") {
-		foreach ($result["rawdata"] as $key => $value) {
-			# ns servers
-			preg_match("/nserver:\s*([-\w\d\.]*)/i", $value, $op_arr);
-			if (!empty($op_arr)) array_push($ns_arr, $op_arr[1]);
-			# created
-			preg_match("/crea[\w]*:\s*([-\w\d\.]+)/i", $value, $op_cr_arr);
-			if (!empty($op_cr_arr)) $created = $op_cr_arr[1];
-			# expires
-			preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_exp_arr);
-			if (!empty($op_exp_arr)) $expires = $op_exp_arr[1];
-			# ip adresses
-			preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
-			if (!empty($op_ip_arr)) array_push($ip_arr, $op_ip_arr[1]);
-			# registrar
-			preg_match("/regis[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
-			if (!empty($op_registr_arr)) $registrar = $op_registr_arr[1];
-			# city
-			preg_match("/city[-_\s\w]*:\s*([-\w\d\.]+)/i", $value, $op_city_arr);
-			if (!empty($op_city_arr)) $city = $op_city_arr[1];
-			# country
-			preg_match("/cou[\w]*:\s*([-\w\d\.]+)/i", $value, $op_country_arr);
-			if (!empty($op_country_arr)) $country = $op_country_arr[1];
+	try {
+		if (isset($result["rawdata"]) AND $result["regrinfo"]["registered"] == "yes") {
+			foreach ($result["rawdata"] as $key => $value) {
+				# ns servers
+				preg_match("/nserver:\s*([-\w\d\.]*)/i", $value, $op_arr);
+				if (!empty($op_arr)) array_push($ns_arr, $op_arr[1]);
+				# created
+				preg_match("/crea[\w]*:\s*([-\w\d\.]+)/i", $value, $op_cr_arr);
+				if (!empty($op_cr_arr)) $created = $op_cr_arr[1];
+				# expires
+				preg_match("/exp[\w]*:\s*([-\w\d\.]+)/i", $value, $op_exp_arr);
+				if (!empty($op_exp_arr)) $expires = $op_exp_arr[1];
+				# ip adresses
+				preg_match("/ip[-\w]*:\s*([-\w\d\.]+)/i", $value, $op_ip_arr);
+				if (!empty($op_ip_arr)) array_push($ip_arr, $op_ip_arr[1]);
+				# registrar
+				preg_match("/regis[\w]*:\s*([-\w\d\.]+)/i", $value, $op_registr_arr);
+				if (!empty($op_registr_arr)) $registrar = $op_registr_arr[1];
+				# city
+				preg_match("/city[-_\s\w]*:\s*([-\w\d\.]+)/i", $value, $op_city_arr);
+				if (!empty($op_city_arr)) $city = $op_city_arr[1];
+				# country
+				preg_match("/cou[\w]*:\s*([-\w\d\.]+)/i", $value, $op_country_arr);
+				if (!empty($op_country_arr)) $country = $op_country_arr[1];
+			}
 		}
-		write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log);
+	} catch (Exception $e) {
+		file_put_contents($log, "<p><b>$e()</b> Помилка запису або опросу</p>", FILE_APPEND | LOCK_EX);
 	}
+	write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log);
+
 }
 
 function write_data2file($query, $created, $expires, $registrar, $city, $country, $ns_arr, $ip_arr, $output_file, $log)
@@ -83,7 +89,7 @@ function write_data2file($query, $created, $expires, $registrar, $city, $country
 	else file_put_contents($log, "<p><b>$query</b> не записан</p>", FILE_APPEND | LOCK_EX);
 }
 
-get_urls($file,$output_file,$log);
+get_urls($file, $output_file, $log);
 /*
 # Reading file line by line
 $file = fopen ("download/urls_list.txt","r");
